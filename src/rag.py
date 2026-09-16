@@ -4,14 +4,8 @@ from src.prompt import build_prompt
 from src.llm import generate_answer
 
 
-def ask_question(query, top_k=5):
-    # 1. Load embedding model
-    model = load_embedding_model()
-
-    # 2. Load FAISS index and chunks
-    index, chunks = load_vector_store()
-
-    # 3. Retrieve relevant chunks
+def ask_question(query, model, index, chunks, top_k=10):
+    # 1. Retrieve relevant chunks
     results = retrieve(
         query=query,
         model=model,
@@ -20,13 +14,13 @@ def ask_question(query, top_k=5):
         top_k=top_k
     )
 
-    # 4. Build prompt using retrieved context
+    # 2. Build prompt using retrieved context
     prompt = build_prompt(
         query=query,
         retrieved_results=results
     )
 
-    # 5. Generate answer using LLM
+    # 3. Generate answer using LLM
     answer = generate_answer(prompt)
 
     return answer, results
@@ -34,23 +28,51 @@ def ask_question(query, top_k=5):
 
 if __name__ == "__main__":
 
-    query = "Why did Karna support Duryodhana?"
-
-    answer, results = ask_question(query)
-
-    print("\n" + "=" * 80)
-    print("QUESTION")
     print("=" * 80)
-    print(query)
-
-    print("\n" + "=" * 80)
-    print("ANSWER")
-    print("=" * 80)
-    print(answer)
-
-    print("\n" + "=" * 80)
-    print("SOURCES")
+    print("MAHABHARATA RAG")
     print("=" * 80)
 
-    for result in results:
-        print(f"Page {result['page_number']}")
+    print("\nLoading embedding model...")
+    model = load_embedding_model()
+
+    print("Loading FAISS index and chunks...")
+    index, chunks = load_vector_store()
+
+    print("\nReady! Ask questions about the Mahabharata.")
+    print("Type 'exit' or 'quit' to stop.")
+
+    while True:
+
+        query = input("\nQuestion: ").strip()
+
+        if query.lower() in {"exit", "quit"}:
+            print("\nExiting...")
+            break
+
+        if not query:
+            print("Please enter a question.")
+            continue
+
+        answer, results = ask_question(
+            query=query,
+            model=model,
+            index=index,
+            chunks=chunks,
+            top_k=10
+        )
+
+        print("\n" + "=" * 80)
+        print("ANSWER")
+        print("=" * 80)
+        print(answer)
+
+        print("\n" + "=" * 80)
+        print("SOURCES")
+        print("=" * 80)
+
+        source_pages = sorted(
+            set(result["page_number"] for result in results)
+        )
+
+        for page in source_pages:
+            print(f"Page {page}")

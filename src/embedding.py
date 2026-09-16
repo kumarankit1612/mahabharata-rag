@@ -18,7 +18,8 @@ def load_embedding_model():
 def create_embeddings(model, texts):
     return model.encode(
         texts,
-        show_progress_bar=True
+        show_progress_bar=True,
+        convert_to_numpy=True
     )
 
 

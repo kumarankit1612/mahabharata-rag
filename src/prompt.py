@@ -14,25 +14,36 @@ def build_prompt(query, retrieved_results):
     context = "\n\n".join(context_parts)
 
     prompt = f"""
-You are a question-answering assistant for the provided Mahabharata document.
+    You are a question-answering assistant for the provided Mahabharata document.
 
-Answer the user's question using only the information provided in the context below.
+    Answer the user's question using only the information provided in the context below.
 
-If the context does not contain enough information to answer the question,
-clearly state that the answer cannot be determined from the provided context.
+    If the context does not contain enough information to answer the question,
+    clearly state that the answer cannot be determined from the provided context.
 
-Do not invent or assume information that is not present in the context.
+    Do not invent or assume information that is not present in the context.
 
-Include the relevant source page numbers in your answer.
+    For every factual statement in your answer, cite the page containing
+    the evidence for that statement using [Page X].
 
-CONTEXT:
-{context}
+    Do not use a page citation merely because the page is present in the context.
 
-QUESTION:
-{query}
+    Do not make inferences about a character's motives, intentions, feelings,
+    relationships, or reasons unless the context explicitly supports that inference.
 
-ANSWER:
-"""
+    If the context contains evidence for only part of the question, answer only
+    that supported part and clearly state what cannot be determined.
+
+    Keep the answer concise and evidence-based.
+
+    CONTEXT:
+    {context}
+
+    QUESTION:
+    {query}
+
+    ANSWER:
+    """
 
     return prompt
 

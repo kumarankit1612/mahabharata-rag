@@ -2,7 +2,7 @@ import pickle
 
 import faiss
 
-from src.config import STORAGE_PATH
+from src.config import STORAGE_PATH,TOP_K
 from src.embedding import load_embedding_model
 
 
@@ -18,7 +18,7 @@ def load_vector_store():
     return index, chunks
 
 
-def retrieve(query, model, index, chunks, top_k=5):
+def retrieve(query, model, index, chunks, top_k=TOP_K):
     query_embedding = model.encode([query])
 
     distances, indices = index.search(
