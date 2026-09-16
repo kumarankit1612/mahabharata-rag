@@ -68,7 +68,11 @@ The project demonstrates the core components of a RAG system:
               v
         Source Page Numbers
 
+
+
 How RAG Works in This Project
+
+
 
 The pipeline follows these steps:
 
@@ -76,10 +80,10 @@ The pipeline follows these steps:
 
 The Mahabharata PDF is loaded and each page is represented with its page number and text.
 
+
 2. Chunking
 
 The extracted text is divided into chunks of approximately 1000 characters with an overlap of 200 characters.
-
 The overlap helps preserve context when information spans across chunk boundaries.
 
 Example:
@@ -91,13 +95,13 @@ Chunk 1
                          v
                    Chunk 2
                    |--------------------1000--------------------|
+
+
 3. Embeddings
 
 Each text chunk is converted into a numerical vector using:
-
 sentence-transformers
 all-mpnet-base-v2
-
 Each embedding contains:
 
 768 dimensions
@@ -107,10 +111,11 @@ For this document:
 20,006 chunks
 20,006 embeddings
 768 dimensions per embedding
+
+
 4. Vector storage
 
 The embeddings are indexed using FAISS.
-
 The current index uses:
 
 FAISS IndexFlatL2
@@ -120,13 +125,13 @@ Dimensions: 768
 
 The retriever searches the vector index for chunks that are semantically similar to the user's question.
 
+
 5. Retrieval
 
 The query is converted into the same embedding space and FAISS retrieves the most similar chunks.
-
 The current configuration retrieves:
-
 TOP_K = 10
+
 6. Prompt construction
 
 The retrieved chunks are inserted into the prompt along with their source page numbers.
@@ -144,7 +149,6 @@ The LLM is instructed to answer using only the supplied context.
 7. Local LLM generation
 
 The retrieved context and user question are sent to a locally running LLM through Ollama.
-
 The model is instructed not to invent information that is not supported by the retrieved context.
 
 8. Source citations
@@ -198,7 +202,9 @@ mahabharata-rag/
 
 Generated files under storage/ and the source document under data/ are intentionally excluded from Git.
 
+
 Setup
+
 1. Clone the repository
 git clone https://github.com/kumarankit1612/mahabharata-rag.git
 
@@ -209,8 +215,10 @@ python -m venv .venv
 Activate it on Windows:
 
 .venv\Scripts\Activate.ps1
+
 3. Install dependencies
 pip install -r requirements.txt
+
 4. Add the source document
 
 Place the Mahabharata PDF inside:
@@ -264,6 +272,7 @@ Type 'exit' or 'quit' to stop.
 Question: Who was Arjuna's teacher?
 Example
 Question
+
 Why did Karna support Duryodhana?
 Retrieved context
 
